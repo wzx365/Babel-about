@@ -59,7 +59,7 @@ export default function ({types: t}) {
 }
 ```
 
-### 可调试的（Debuggable）
+### 可调试的（Debuggable）(source-map)
 源代码映射支持，因此您可以轻松调试编译的代码。
 
 ### 规范的

@@ -11,9 +11,25 @@ const presets = [
             useBuiltIns: "usage"
         }
     ],
-    "@babel/react"
+    "@babel/react",
+    "@babel/flow",
+    "@babel/typescript"
 ]
 
-module.exports = {
-    presets
+const plugins = [
+    "@babel/plugin-transform-runtime"
+]
+
+// module.exports = {
+//     presets,
+//     plugins
+// }
+
+module.exports = function(api){
+    console.log('api', api)
+    api.cache(true)
+    return {
+        presets,
+        plugins
+    }
 }
