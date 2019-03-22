@@ -8,7 +8,8 @@ const presets = [
                 chrome: "40",
                 safari: "9.1",
             },
-            useBuiltIns: "usage"
+            useBuiltIns: "usage",
+            corejs: 2
         }
     ],
     "@babel/react",
@@ -17,16 +18,12 @@ const presets = [
 ]
 
 const plugins = [
-    "@babel/plugin-transform-runtime"
+    "@babel/plugin-transform-runtime",
+    [ "@babel/plugin-proposal-decorators", { "legacy": true } ]
 ]
 
-// module.exports = {
-//     presets,
-//     plugins
-// }
-
 module.exports = function(api){
-    console.log('api', api)
+    // console.log('api', api)
     api.cache(true)
     return {
         presets,
