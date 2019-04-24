@@ -8,6 +8,7 @@ console.log('index')
 require('./index.css')
 require('./scss.scss')
 require('./less.less')
+import('./compose')
 
 if (module.hot) {
     module.hot.accept()
