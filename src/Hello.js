@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react'
-import { Modal, Input, Button } from 'antd'
+import { Modal, Input, Button, Tooltip } from 'antd'
+import QRCode from './static/qrcode.min.js'
 const confirm = Modal.confirm;
 import styles from './scss.scss'
 // import ee from './EventEmitter'
 // require('./Observer')
 // console.log(ee)
 console.log(styles, 'styles')
+
+console.log(QRCode)
 
 function H(props) {
     let { msg } = props
@@ -19,6 +22,7 @@ export default class Hello extends Component {
             visible: false,
             confirmLoading: false
         }
+        this.canvasWrap = null
     }
     toggleModal = () => {
         let { visible } = this.state 
@@ -95,33 +99,74 @@ export default class Hello extends Component {
         .catch(err => {
             console.log('err', err)
             return err
-        }).finally(res => {
+        })
+        .finally(res => {
             console.log('finally' + res)
             console.timeEnd('abc')
         })
     }
+    getCanvasWrap = wrap => {
+        console.log(1, wrap)
+        this.canvasWrap = wrap
+    }
+    getCanvasWrap2 = wrap => {
+        console.log(2, wrap)
+        this.canvasWrap2 = wrap
+    }
+    handleQRcode = () => {
+        console.log(this.canvasWrap)
+        this.setState({
+            visible: true
+        }, () => {
+            setTimeout(() => {
+                console.log(this.canvasWrap)
+                console.log(this.canvasWrap2)
+                if (!this.canvasWrap2) {
+                    console.log('不存在')
+                    return false
+                }
+                this.qrcode = new QRCode(this.canvasWrap2, {
+                    width: 200,
+                    height: 200
+                })
+                this.qrcode.makeCode('https://baidu.com')
+            })
+        })
+    }
     render() {
-        let { visible, confirmLoading } = this.state 
+        let { visible, confirmLoading, qrUrl } = this.state 
         return (
             <Fragment>
                 <H msg={'hello, babel...'}/>
                 <div className={styles.pack}>hello...webpack</div>
-                <i className="iconfont icon-lvyou"/>
+                <p><i className="iconfont icon-lvyou"/><br/></p>
+                <Tooltip title="prompt text">
+                    <span>Tooltip will show on mouse enter.</span>
+                </Tooltip>
+                <br/>
                 <Button type="primary" onClick={this.toggleModal}>切换弹窗</Button>&nbsp;
                 <Button type="primary" onClick={this.showConfirm}>confirm</Button>&nbsp;
                 <Button type="brand" onClick={this.showConfirm}>confirm</Button>&nbsp;
                 <Button type="brand" onClick={this.doPromise}>Promise</Button>&nbsp;
-                <Modal visible={visible}
-                    title="对话框"
-                    onCancel={this.toggleModal}
-                    onOk={this.onOk}
-                    confirmLoading={confirmLoading}
-                >
-                    <div>
-                        <p>abc</p>
-                        <p>def</p>
-                    </div>
-                </Modal>
+                <Button type="brand" onClick={this.handleQRcode}>getQRcode</Button>&nbsp;
+                <div ref={this.getCanvasWrap}></div>
+                {
+                    visible
+                    &&
+                    <Modal 
+                        visible={visible}
+                        title="对话框"
+                        onCancel={this.toggleModal}
+                        onOk={this.onOk}
+                        confirmLoading={confirmLoading}
+                    >
+                        <div>
+                            <p>abc</p>
+                            <p>def</p>
+                            <div className="abcdef" ref={this.getCanvasWrap2}></div>
+                        </div>
+                    </Modal>
+                }
             </Fragment>
         )
     }

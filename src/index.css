@@ -2,3 +2,6 @@ body {
     color: pink;
     background-color: blueviolet;
 }
+body #root, body #app {
+    padding: 20px;
+}
