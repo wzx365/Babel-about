@@ -140,6 +140,7 @@ export default class Hello extends Component {
                 <H msg={'hello, babel...'}/>
                 <div className={styles.pack}>hello...webpack</div>
                 <p><i className="iconfont icon-lvyou"/><br/></p>
+                <div className={styles.bgimg}>demo-img</div>
                 <Tooltip title="prompt text">
                     <span>Tooltip will show on mouse enter.</span>
                 </Tooltip>

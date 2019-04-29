@@ -7,6 +7,9 @@ const ExtractCssPlugin = require('extract-text-webpack-plugin')
 const MiniCssPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const extractCss = new ExtractCssPlugin(`static/css/[name].[chunkhash:5].css`)
+
+const publicPath = '/'
 
 const config = {
     // 模式配置
@@ -26,7 +29,8 @@ const config = {
     // 出口文件
     output: {
         path: path.resolve(__dirname, 'dist'), // 出口文件的路径path必须是绝对路径
-        filename: 'static/js/[name].[hash:5].js'
+        filename: 'static/js/[name].[hash:5].js',
+        publicPath
     },
     // 对应处理模块
     module: {
@@ -42,61 +46,62 @@ const config = {
                 //     { loader: 'style-loader' },
                 //     { loader: 'css-loader' }
                 // ]
-                use: ExtractCssPlugin.extract({
+                use: extractCss.extract({
                     use: ['css-loader', 'postcss-loader'], // 将css以link的方式引入就不需要style-loader了
-                    publicPath: '../../'
+                    // publicPath: '../../'
                 })
                 // use: [MiniCssPlugin.loader, 'css-loader', 'postcss-loader']
             },
             {
                 test: /\.scss$/,
-                use: ExtractCssPlugin.extract({
+                use: extractCss.extract({
                     use: ['css-loader?modules=true', 'sass-loader', 'postcss-loader'],
-                    publicPath: '../../'
+                    // publicPath: '../../'
                 })
             },
             {
                 test: /\.less$/,
-                use: ExtractCssPlugin.extract({
+                use: extractCss.extract({
                     use: ['css-loader?modules=true', 'less-loader', 'postcss-loader'],
-                    publicPath: '../../'
+                    // publicPath: '../../'
                 })
             },
             {
                 test: /\.(png|jpe?g|gif)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 8 * 1024,
-                        outputPath: 'static/images/'
-                    }
-                }]
-            },
-            {
-                test: /\.html?$/,
-                use: 'html-withimg-loader'
+                loader: 'url-loader',
+                exclude: /(node_modules)/,
+                options: {
+                    limit: 8 * 1024,
+                    name: 'static/images/[name].[hash:5].[ext]',
+                    publicPath
+                },
             },
             {
                 test: /\.(eot|ttf|woff2?|svg)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            outputPath: 'static/iconfont'
-                        }
-                    }
-                ]
-            }
+                loader: 'url-loader',
+                exclude: /(node_modules)/,
+                options: {
+                    limit: 8 * 1024,
+                    name: 'static/iconfont/[name].[hash:5].[ext]',
+                    publicPath
+                }
+            },
+            {
+                test: /\.html?$/,
+                loader: 'html-url-loader',
+                query: { deep: true }
+            },
         ]
     },
     // 对应的插件
     plugins: [
         // new webpack.HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(),
-        new ExtractCssPlugin({
-            // filename: 'static/css/[name].[contenthash:5].css'
-            filename: 'static/css/[name].[chunkhash:5].css'
-        }),
+        extractCss,
+        // new ExtractCssPlugin({
+        //     // filename: 'static/css/[name].[contenthash:5].css'
+        //     filename: 'static/css/[name].[chunkhash:5].css'
+        // }),
         // new MiniCssPlugin({
         //     filename: 'static/css/[name].[contenthash:5].css'
         // }),

@@ -1,9 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
 import App from './Hello'
+import SelectCitys from './SelectCitys'
 import './static/iconfont/iconfont.css'
 
-render(<App />, document.querySelector('#app'))
+render(<SelectCitys />, document.querySelector('#app'))
 console.log('index')
 require('./index.css')
 require('./scss.scss')
